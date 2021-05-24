@@ -1,4 +1,3 @@
--- /home/weiting/.config/xmobar/xmobarrc0
 -- http://projects.haskell.org/xmobar/
 -- install xmobar with these flags: --flags="with_alsa" --flags="with_mpd" --flags="with_xft"  OR --flags="all_extensions"
 -- you can find weather location codes here: http://weather.noaa.gov/index.html
@@ -42,14 +41,12 @@ Config { font    = "xft:WenQuanYi Micro Hei:weight=bold:pixelsize=12:antialias=t
                              , ("partly cloudy", "<icon=weather/weather-partly-cloudy.xpm/>")
                              , ("mostly cloudy", "")
                              , ("considerable cloudiness", "<icon=weather/weather-rainy.xpm/>")]
-                             ["-t", "<fn=2><skyConditionS></fn> <tempC>°C / <tempF>°F"
-                             , "-L","10", "-H", "25", "--normal", "black"
-                             , "--high", "lightgoldenrod4", "--low", "darkseagreen4"]
+                               ["-t", "<fn=2><skyConditionS></fn> <fc=#DAF7A6> <tempC>°C </fc>(<fc=#DAF7A6> <tempF>°F </fc>)"]
                              18000,
                     -- Time and date
-                    Run Date " <fc=#9359df> %a %b %d %Y </fc><fc=#666666> <fn=2>| </fn></fc><fc=#46d9ff><icon=calendar-clock-icon_20.xpm/> %H:%M:%S </fc>" "date" 10,
+                    Run Date " <fc=#AF7AC5> %a %b %d %Y </fc><fc=#666666> <fn=2>| </fn></fc><fc=#46d9ff><icon=calendar-clock-icon_20.xpm/> %H:%M:%S </fc>" "date" 10,
 
-                    Run Mpris2 "spotify" ["-t", "<artist> - <title>"] 10,
+                    Run Mpris2 "spotify" ["-t", "<icon=music.xpm/> <fc=#F5B7B1> <artist> - <title> </fc>"] 10,
 
                     -- Prints out the left side items such as workspaces, layout, etc.
                     -- The workspaces are 'clickable' in my configs.
