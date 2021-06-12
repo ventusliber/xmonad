@@ -108,6 +108,7 @@ windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace
 myStartupHook = do
         spawnOnce "nitrogen --restore &"
         spawnOnce "compton &"
+        spawnOnce "ibus-setup &"
 
 ------------------------------------------------------------------------
 -- WORKSPACES
@@ -129,8 +130,11 @@ clickable ws = "<action=xdotool key super+"++show i++">"++ws++"</action>"
 
 myKeys :: [(String, X ())]
 myKeys =
+  -- Basic
+    [ ("M-b", spawn (myBrowser))
+    , ("S-p", spawn "gnome-screenshot -i")  -- Switch focus to next monitor
   -- Workspaces
-    [ ("M-.", nextScreen)  -- Switch focus to next monitor
+    , ("M-.", nextScreen)  -- Switch focus to next monitor
     , ("M-,", prevScreen)  -- Switch focus to prev monitor
     , ("M-S-<Right>", shiftTo Next nonNSP >> moveTo Next nonNSP) -- Shifts focused window to next ws
     , ("M-S-<Left>", shiftTo Prev nonNSP >> moveTo Prev nonNSP)  -- Shifts focused window to prev ws
@@ -259,16 +263,9 @@ myManageHook = composeAll
      -- I'm doing it this way because otherwise I would have to write out
      -- the full name of my clickable workspaces, which would look like:
      -- doShift "<action xdotool super+8>gfx</action>"
-     [ className =? "obs"     --> doShift ( "video.obs" )
-     , title =? "firefox"     --> doShift ( "web.browser" )
-     , title =? "qutebrowser" --> doShift ( "web.browser" )
-     , className =? "mpv"     --> doShift ( "video.movie player" )
-     , className =? "vlc"     --> doShift ( "video.movie player" )
-     , className =? "Gimp"    --> doShift ( "graphics.gimp")
-     , className =? "Gimp"    --> doFloat
-     , title =? "Oracle VM VirtualBox Manager"     --> doFloat
-     , className =? "VirtualBox Manager" --> doShift  ( "dev.virtualization" )
-     , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
+     [ className =? "notification"    --> doFloat
+     , className =? "atom"            --> doShift ( myWorkspaces !! 2 )
+     , className =? "spotify"         --> doShift ( myWorkspaces !! 4 )
      ] <+> namedScratchpadManageHook myScratchPads
 
 ------------------------------------------------------------------------
