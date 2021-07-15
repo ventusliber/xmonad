@@ -109,6 +109,7 @@ myStartupHook = do
         spawnOnce "nitrogen --restore &"
         spawnOnce "compton &"
         spawnOnce "ibus-setup &"
+        spawnOnce "dunst &"
 
 ------------------------------------------------------------------------
 -- WORKSPACES
@@ -132,16 +133,20 @@ myKeys :: [(String, X ())]
 myKeys =
   -- Basic
     [ ("M-b", spawn (myBrowser))
-    , ("S-p", spawn "gnome-screenshot -i")  -- Switch focus to next monitor
+    , ("M-f", spawn "nautilus")  -- Switch focus to next monitor
+    , ("M-l", spawn "gnome-screensaver-command -l")  -- Lock the screen
+    , ("S-p", spawn "gnome-screenshot -i")  -- screen shot
+
   -- Workspaces
     , ("M-.", nextScreen)  -- Switch focus to next monitor
     , ("M-,", prevScreen)  -- Switch focus to prev monitor
     , ("M-S-<Right>", shiftTo Next nonNSP >> moveTo Next nonNSP) -- Shifts focused window to next ws
     , ("M-S-<Left>", shiftTo Prev nonNSP >> moveTo Prev nonNSP)  -- Shifts focused window to prev ws
   -- Media
-    , ("M-<Page_Down>", spawn "amixer set Master 5%- unmute") -- volume down
-    , ("M-<Page_Up>", spawn "amixer set Master 5%+ unmute") -- volume up
-    , ("M-<Print>", spawn "amixer -D pulse set Master 1+ toggle") --- mute or unmute
+    , ("M-<Page_Down>", spawn "/home/weiting/.xmonad/scripts/volumeControl down") -- volume down
+    , ("M-<Page_Up>", spawn "/home/weiting/.xmonad/scripts/volumeControl up") -- volume up
+    -- , ("M-<Print>", spawn "amixer -D pulse set Master 1+ toggle") --- mute or unmute
+    , ("M-<Print>", spawn "/home/weiting/.xmonad/scripts/volumeControl mute") --- mute or unmute
 
     , ("M-<Insert>", spawn "playerctl play-pause")
     , ("M-<Delete>", spawn "playerctl previous")
@@ -204,16 +209,16 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                where
                  h = 0.9
                  w = 0.9
-                 t = 0.95 -h
-                 l = 0.95 -w
+                 t = 0.9 -h
+                 l = 0.9 -w
     spawnMocp  = myTerminal ++ " -n mocp 'mocp'"
     findMocp   = resource =? "mocp"
     manageMocp = customFloating $ W.RationalRect l t w h
                where
                  h = 0.9
                  w = 0.9
-                 t = 0.95 -h
-                 l = 0.95 -w
+                 t = 0.9 -h
+                 l = 0.9 -w
 
 
 -- myScratchPads :: [NamedScratchpad]
@@ -266,6 +271,7 @@ myManageHook = composeAll
      [ className =? "notification"    --> doFloat
      , className =? "atom"            --> doShift ( myWorkspaces !! 2 )
      , className =? "spotify"         --> doShift ( myWorkspaces !! 4 )
+     , isFullscreen -->  doFullFloat
      ] <+> namedScratchpadManageHook myScratchPads
 
 ------------------------------------------------------------------------
@@ -312,13 +318,14 @@ main = do
 
         -- hooks, layouts
           layoutHook         = myLayoutHook,
-          -- manageHook         = myManageHook <+> manageDocks ,
+          manageHook         = myManageHook <+> manageDocks ,
           handleEventHook    = docksEventHook,
           startupHook        = myStartupHook,
           -- logHook            = myLogHook
           logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
                 -- the following variables beginning with 'pp' are settings for xmobar.
-                { ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 1
+                { ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 0
+                                -- >> hPutStrLn xmproc1 x                       -- xmobar on monitor 1
                 , ppCurrent = xmobarColor "#98be65" "" . wrap "[" "]"           -- Current workspace
                 , ppVisible = xmobarColor "#98be65" "" . clickable              -- Visible but not current workspace
                 , ppHidden = xmobarColor "#82AAFF" "" . wrap "*" "" . clickable -- Hidden workspaces
