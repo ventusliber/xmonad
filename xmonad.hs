@@ -133,9 +133,12 @@ myKeys :: [(String, X ())]
 myKeys =
   -- Basic
     [ ("M-b", spawn (myBrowser))
+    , ("M-e", spawn "atom")  -- atom
     , ("M-f", spawn "nautilus")  -- Switch focus to next monitor
     , ("M-l", spawn "gnome-screensaver-command -l")  -- Lock the screen
     , ("S-p", spawn "gnome-screenshot -i")  -- screen shot
+
+    , ("M-S-f", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
 
   -- Workspaces
     , ("M-.", nextScreen)  -- Switch focus to next monitor
@@ -145,7 +148,6 @@ myKeys =
   -- Media
     , ("M-<Page_Down>", spawn "/home/weiting/.xmonad/scripts/volumeControl down") -- volume down
     , ("M-<Page_Up>", spawn "/home/weiting/.xmonad/scripts/volumeControl up") -- volume up
-    -- , ("M-<Print>", spawn "amixer -D pulse set Master 1+ toggle") --- mute or unmute
     , ("M-<Print>", spawn "/home/weiting/.xmonad/scripts/volumeControl mute") --- mute or unmute
 
     , ("M-<Insert>", spawn "playerctl play-pause")
