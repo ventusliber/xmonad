@@ -44,6 +44,7 @@ import XMonad.Hooks.DynamicLog (dynamicLogWithPP, wrap, xmobarPP, xmobarColor, s
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks (avoidStruts, docksEventHook, manageDocks, ToggleStruts(..))
 import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat)
+import XMonad.Hooks.UrgencyHook
 
 -- Prompts
 import XMonad.Prompt
@@ -54,6 +55,8 @@ import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
+import XMonad.Util.NamedWindows
+
 
 -- StackSet
 import qualified XMonad.StackSet as W
@@ -95,6 +98,19 @@ myClickJustFocuses = False
 
 windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
+
+------------------------------------------------------------------------
+-- desktop notifications -- dunst package required
+------------------------------------------------------------------------
+
+data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
+
+instance UrgencyHook LibNotifyUrgencyHook where
+    urgencyHook LibNotifyUrgencyHook w = do
+        name     <- getName w
+        Just idx <- fmap (W.findTag w) $ gets windowset
+
+        safeSpawn "notify-send" [show name, "workspace " ++ idx]
 
 ------------------------------------------------------------------------
 -- AUTOSTART
@@ -304,7 +320,7 @@ main = do
 --
 -- No need to modify this.
 --
-  xmonad $ ewmh def {
+  xmonad $ withUrgencyHook LibNotifyUrgencyHook $ ewmh def {
         -- simple stuff
           terminal           = myTerminal,
           focusFollowsMouse  = myFocusFollowsMouse,
