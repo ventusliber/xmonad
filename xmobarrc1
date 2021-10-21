@@ -1,3 +1,4 @@
+
 Config { font    = "xft:WenQuanYi Micro Hei:weight=bold:pixelsize=12:antialias=true:hinting=true"
        , additionalFonts = [ "xft:Mononoki Nerd Font:pixelsize=12:antialias=true:hinting=true"
                            , "xft:Mononoki Nerd Font:pixelsize=18:antialias=true:hinting=true"
@@ -5,7 +6,7 @@ Config { font    = "xft:WenQuanYi Micro Hei:weight=bold:pixelsize=12:antialias=t
                            ]
        , bgColor = "#282c34"
        , fgColor = "#ff6c6b"
-       , position = Static { xpos = 0 , ypos = 0, width = 1920, height = 24 }
+       , position = Static { xpos = 1920 , ypos = 0, width = 1920, height = 24 }
        , lowerOnStart = True
        , hideOnStart = False
        , allDesktops = True

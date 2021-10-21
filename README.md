@@ -6,7 +6,7 @@
   * dmenu
   * xmonadbar
     ```
-    apt-get install xmobar --flags="all_extensions"
+    apt-get install xmobar
     ```
   * playerctl
     ```
@@ -15,3 +15,4 @@
     sudo dpkg -i libplayerctl2_2.0.1-1_amd64.deb playerctl_2.0.1-1_amd64.deb
     ```
   * xdotool
+  * dunst
