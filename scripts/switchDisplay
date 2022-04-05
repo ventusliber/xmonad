@@ -1,0 +1,25 @@
+#!/bin/bash
+
+
+# set dual monitors
+dual () {
+  # xrandr --output DP-2-2 --primary --left-of DP-2-1 --output DP-2-1 --auto
+  # xrandr --output DP-2-1 --primary --left-of DP-2-2 --output DP-2-2 --auto
+  xrandr --output DP-2-1 --primary --left-of DP-2-2 --output DP-2-2 --left-of eDP-1 --output eDP-1 --auto
+  echo  "Switch to dual monitor"
+}
+
+# set single monitor
+single () {
+    xrandr --output eDP-1 --primary --auto
+    echo  "Switch to single monitor"
+}
+
+case $1 in
+  single)
+    single
+    ;;
+  dual)
+    dual
+    ;;
+esac

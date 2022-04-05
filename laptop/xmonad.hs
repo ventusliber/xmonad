@@ -124,7 +124,7 @@ instance UrgencyHook LibNotifyUrgencyHook where
 myStartupHook = do
         spawnOnce "nitrogen --restore &"
         spawnOnce "compton &"
-        spawnOnce "ibus-setup &"
+        spawnOnce "ibus-daemon &"
         spawnOnce "dunst &"
 
 ------------------------------------------------------------------------
@@ -135,7 +135,7 @@ myStartupHook = do
 -- of simply StdInReader in xmobar config so you can pass actions to it.
 
 -- myWorkspaces = [" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "]
-myWorkspaces = [" web ", " atom ", " chat ", " spotify ", " youtube ", " I ", " II ", " III ", " VI "]
+myWorkspaces = [" web ", " atom ", " chat ", " music ", " video ", " I ", " II ", " III ", " VI "]
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
 clickable ws = "<action=xdotool key super+"++show i++">"++ws++"</action>"
@@ -151,9 +151,10 @@ myKeys =
     [ ("M-b", spawn (myBrowser))
     , ("M-e", spawn "atom")  -- atom
     , ("M-f", spawn "nautilus")  -- Switch focus to next monitor
-    , ("M-l", spawn "gnome-screensaver-command -l")  -- Lock the screen
+    , ("M-l", spawn "dm-tool lock")  -- Lock the screen
     , ("S-p", spawn "gnome-screenshot -i")  -- screen shot
-
+    , ("M-d", spawn "/home/weiting/.xmonad/scripts/switchDisplay dual") -- switch display to dual screen
+    , ("M-s", spawn "/home/weiting/.xmonad/scripts/switchDisplay single") -- switch display to single screen
     , ("M-S-f", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
 
   -- Workspaces
@@ -238,39 +239,6 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                  t = 0.9 -h
                  l = 0.9 -w
 
-
--- myScratchPads :: [NamedScratchpad]
--- myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
---                 , NS "mocp" spawnMocp findMocp manageMocp
---                 , NS "calculator" spawnCalc findCalc manageCalc
---                 ]
---   where
---     spawnTerm  = myTerminal ++ " -t scratchpad"
---     findTerm   = title =? "scratchpad"
---     manageTerm = customFloating $ W.RationalRect l t w h
---                where
---                  h = 0.9
---                  w = 0.9
---                  t = 0.95 -h
---                  l = 0.95 -w
---     spawnMocp  = myTerminal ++ " -t mocp -e mocp"
---     findMocp   = title =? "mocp"
---     manageMocp = customFloating $ W.RationalRect l t w h
---                where
---                  h = 0.9
---                  w = 0.9
---                  t = 0.95 -h
---                  l = 0.95 -w
---     spawnCalc  = "qalculate-gtk"
---     findCalc   = className =? "Qalculate-gtk"
---     manageCalc = customFloating $ W.RationalRect l t w h
---                where
---                  h = 0.5
---                  w = 0.4
---                  t = 0.75 -h
---                  l = 0.70 -w
-
-
 ------------------------------------------------------------------------
 -- MANAGEHOOK
 ------------------------------------------------------------------------
@@ -343,7 +311,7 @@ main = do
           logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
                 -- the following variables beginning with 'pp' are settings for xmobar.
                 { ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 0
-                                -- >> hPutStrLn xmproc1 x                       -- xmobar on monitor 1
+                                -- >> hPutStrLn xmproc1 x                          -- xmobar on monitor 1
                 , ppCurrent = xmobarColor "#98be65" "" . wrap "[" "]"           -- Current workspace
                 , ppVisible = xmobarColor "#98be65" "" . clickable              -- Visible but not current workspace
                 , ppHidden = xmobarColor "#82AAFF" "" . wrap "*" "" . clickable -- Hidden workspaces

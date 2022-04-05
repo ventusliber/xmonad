@@ -1,0 +1,58 @@
+Config { font    = "xft:WenQuanYi Micro Hei:weight=bold:pixelsize=12:antialias=true:hinting=true"
+       , additionalFonts = [ "xft:Mononoki Nerd Font:pixelsize=12:antialias=true:hinting=true"
+                           , "xft:Mononoki Nerd Font:pixelsize=18:antialias=true:hinting=true"
+                           , "xft:FontAwesome:pixelsize=13"
+                           ]
+       , bgColor = "#282c34"
+       , fgColor = "#ff6c6b"
+       , position = Static { xpos = 0 , ypos = 0, width = 1920, height = 24 }
+       , lowerOnStart = True
+       , hideOnStart = False
+       , allDesktops = True
+       , persistent = True
+       , iconRoot = "/home/weiting/.xmonad/xpm/" -- default: "."
+       , commands = [
+                    -- Runs a standard shell command 'uname -n' to get system name
+                    Run Com "uname" ["-n"] "" 3600,
+
+                    -- Cpu usage in percent
+                    Run Cpu ["-t", "<fc=#ecbe7b><icon=cpu_20.xpm/> <total>%</fc>","-H","50","--high","red"] 20,
+
+                    -- Ram used number and percent
+                    Run Memory ["-t", "<fc=#ff6c6b><icon=memory-icon_20.xpm/> <used>M (<usedratio>%)</fc>"] 20,
+
+                    -- Disk space free
+                    Run DiskU [("/", "<fc=#45ae61><icon=harddisk-icon_20.xpm/> <free> free</fc>")] [] 60,
+
+                    -- Time and date
+                    Run Date "<fc=#AF7AC5> %a %b %d %Y</fc><fc=#666666> <fn=2>|</fn></fc><fc=#46d9ff><icon=calendar-clock-icon_20.xpm/> %H:%M:%S </fc>" "date" 10,
+
+                    -- Weather
+                    Run Weather "KPHL" ["-t", "<fc=#DAF7A6> <tempC>°C (<tempF>°F)</fc>"] 18000,
+
+                    -- Battery
+                    Run BatteryP ["BAT0"] ["-t", "<icon=battery.xpm/><fc=#02d4cf><left>%</fc>"] 360,
+
+                    -- Music
+                    Run Mpris2 "chromium.instance254069" ["-t", "<icon=music.xpm/> <fc=#7ba3e7> <artist> - <title> </fc>"] 10,
+
+                    -- Volume
+                    Run Com "bash" ["-c" ,"/home/weiting/.xmonad/scripts/get-volumne.sh"] "myvolume" 10,
+
+                    -- Prints out the left side items such as workspaces, layout, etc.
+                    -- The workspaces are 'clickable' in my configs.
+                    Run UnsafeStdinReader
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "<action=`xdotool key control+alt+g`><icon=haskell_20.xpm/></action>\
+                    \<fc=#666666>|</fc>%UnsafeStdinReader% }{ \
+                    \%mpris2%\
+                    \<fc=#666666><fn=2>|</fn></fc>%cpu%\
+                    \<fc=#666666><fn=2>|</fn></fc>%memory%\
+                    \<fc=#666666><fn=2>|</fn></fc>%disku%\
+                    \<fc=#666666><fn=2>|</fn></fc>%KPHL%\
+                    \<fc=#666666><fn=2>|</fn></fc>%date%\
+                    \<fc=#666666><fn=2>|</fn></fc> <fc=#fff2cc><icon=volume-high.xpm/>%myvolume%</fc>\
+                    \<fc=#666666><fn=2>|</fn></fc>%battery%"
+       }
