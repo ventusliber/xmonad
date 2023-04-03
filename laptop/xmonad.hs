@@ -126,6 +126,9 @@ myStartupHook = do
         spawnOnce "compton &"
         spawnOnce "ibus-daemon &"
         spawnOnce "dunst &"
+        -- spawnOnce "xrandr --output DP-1 --mode 1920x1080"
+        -- spawnOnce "xrandr --output HDMI-1 --mode 1920x1080"
+        -- spawnOnce "xrandr --output HDMI-1 --left-of DP-1"
 
 ------------------------------------------------------------------------
 -- WORKSPACES
@@ -135,7 +138,7 @@ myStartupHook = do
 -- of simply StdInReader in xmobar config so you can pass actions to it.
 
 -- myWorkspaces = [" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "]
-myWorkspaces = [" web ", " atom ", " chat ", " music ", " video ", " I ", " II ", " III ", " VI "]
+myWorkspaces = [" web ", " code ", " chat ", " music ", " video ", " I ", " II ", " III ", " VI "]
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
 clickable ws = "<action=xdotool key super+"++show i++">"++ws++"</action>"
@@ -311,7 +314,7 @@ main = do
           logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
                 -- the following variables beginning with 'pp' are settings for xmobar.
                 { ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 0
-                                -- >> hPutStrLn xmproc1 x                          -- xmobar on monitor 1
+                                >> hPutStrLn xmproc1 x                          -- xmobar on monitor 1
                 , ppCurrent = xmobarColor "#98be65" "" . wrap "[" "]"           -- Current workspace
                 , ppVisible = xmobarColor "#98be65" "" . clickable              -- Visible but not current workspace
                 , ppHidden = xmobarColor "#82AAFF" "" . wrap "*" "" . clickable -- Hidden workspaces
